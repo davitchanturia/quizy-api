@@ -36,6 +36,10 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        return response()->noContent();
+        $token = $user->createToken('auth_token')->plainTextToken;
+
+        return response()
+            ->noContent()
+            ->cookie('auth_token', $token, 60 * 24 * 7, '/', null, true, true);
     }
 }
