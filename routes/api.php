@@ -16,3 +16,5 @@ Route::middleware(['auth:sanctum'])->get('/get', function(Request $request) {
 });
 
 Route::middleware(['auth:sanctum'])->get('/quiz', [QuizController::class, 'index']);
+
+Route::middleware(['auth:sanctum'])->get('/quiz/categories', [QuizController::class, 'categories']);

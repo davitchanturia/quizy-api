@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreQuizRequest;
 use App\Http\Requests\UpdateQuizRequest;
 use App\Models\Quiz;
+use App\Models\QuizCategory;
 
 class QuizController extends Controller
 {
@@ -13,7 +14,12 @@ class QuizController extends Controller
      */
     public function index()
     {
-        return Quiz::with('questions.answers', 'owner', 'category')->get();
+        return Quiz::with('owner', 'category')->get();
+    }
+
+    public function categories()
+    {
+        return QuizCategory::all();
     }
 
     /**
