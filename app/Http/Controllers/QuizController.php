@@ -13,7 +13,7 @@ class QuizController extends Controller
      */
     public function index()
     {
-        //
+        return Quiz::with('questions.answers', 'owner')->get();
     }
 
     /**
