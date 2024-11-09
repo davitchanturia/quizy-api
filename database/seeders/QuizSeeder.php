@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Quiz;
 use App\Models\Question;
 use App\Models\Answer;
+use App\Models\QuizCategory;
 use Illuminate\Database\Seeder;
 
 class QuizSeeder extends Seeder
@@ -16,8 +17,12 @@ class QuizSeeder extends Seeder
      */
     public function run()
     {
+        $quizCategories = QuizCategory::factory(20)->create();
+
         // Create 2 quizzes
-        Quiz::factory(2)->create()->each(function ($quiz) {
+        Quiz::factory(5)->create([
+            'category_id' => $quizCategories->random()->id,
+        ])->each(function ($quiz) {
             // Create 10 questions for each quiz
             Question::factory(10)->create([
                 'quiz_id' => $quiz->id,

@@ -17,8 +17,10 @@ class Quiz extends Model
     protected $fillable = [
         'title',
         'description',
+        'category_id',
         'owner_id',
         'is_active',
+        'difficulty',
     ];
 
     /**
@@ -39,6 +41,16 @@ class Quiz extends Model
     public function questions()
     {
         return $this->hasMany(Question::class);
+    }
+
+        /**
+     * Get the quiz categories for the quiz.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function category()
+    {
+        return $this->hasOne(QuizCategory::class, 'id', 'category_id');
     }
 
     /**

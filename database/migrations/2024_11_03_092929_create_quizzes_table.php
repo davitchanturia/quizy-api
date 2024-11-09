@@ -20,6 +20,8 @@ return new class extends Migration
                   ->onDelete('cascade')
                   ->onUpdate('cascade');
             $table->boolean('is_active')->default(true);
+            $table->boolean('category_id');
+            $table->boolean('difficulty');
             $table->timestamps();
         });
     }
