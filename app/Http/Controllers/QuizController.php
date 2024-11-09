@@ -6,15 +6,29 @@ use App\Http\Requests\StoreQuizRequest;
 use App\Http\Requests\UpdateQuizRequest;
 use App\Models\Quiz;
 use App\Models\QuizCategory;
+use Illuminate\Http\Request;
 
 class QuizController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return Quiz::with('owner', 'category')->get();
+        $difficulty = $request->query('difficulty', null);
+        $search = $request->query('search', '');
+
+        // Query the quizzes with related 'owner' and 'category' data, and apply filters
+        $quizzes = Quiz::with('owner', 'category')
+            ->when($difficulty, function ($query, $difficulty) {
+                return $query->where('difficulty', $difficulty);
+            })
+            ->when($search, function ($query, $search) {
+                return $query->where('title', 'like', "%{$search}%");
+            })
+            ->get();
+
+        return response()->json($quizzes);
     }
 
     public function categories()
