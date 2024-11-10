@@ -15,19 +15,26 @@ class QuizController extends Controller
      */
     public function index(Request $request)
     {
-        $difficulty = $request->query('difficulty', null);
-        $search = $request->query('search', '');
+        $request->validate([
+            'categories' => 'array',
+        ]);
 
-        // Query the quizzes with related 'owner' and 'category' data, and apply filters
-        $quizzes = Quiz::with('owner', 'category')
+        $difficulty = $request->query('difficulty');
+        $search = $request->query('search');
+        $categories = $request->input('categories');
+        
+        $quizzes = Quiz::with(['owner', 'category'])
             ->when($difficulty, function ($query, $difficulty) {
                 return $query->where('difficulty', $difficulty);
             })
             ->when($search, function ($query, $search) {
                 return $query->where('title', 'like', "%{$search}%");
             })
+            ->when(!empty($categories), function ($query) use ($categories) {
+                return $query->whereIn('category_id', $categories);
+            })
             ->get();
-
+    
         return response()->json($quizzes);
     }
 
