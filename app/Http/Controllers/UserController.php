@@ -10,9 +10,8 @@ class UserController extends Controller
 {
     public function uploadAvatar(Request $request)
     {
-        // Validate image file
         $validator = Validator::make($request->all(), [
-            'avatar' => 'required|image|mimes:jpeg,png,jpg,gif|max:1024', // only images less than 1MB
+            'avatar' => 'required|image|mimes:jpeg,png,jpg,gif|max:1024',
         ]);
 
         if ($validator->fails()) {

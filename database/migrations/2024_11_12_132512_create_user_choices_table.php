@@ -11,22 +11,27 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('quizzes', function (Blueprint $table) {
+        Schema::create('user_choices', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->text('description')->nullable();
+        
             $table->foreignId('owner_id')
                   ->constrained('users')
                   ->onDelete('cascade')
                   ->onUpdate('cascade');
-            $table->boolean('is_active')->default(true);
-            $table->foreignId('category_id')
-                ->nullable()
-                ->constrained('quiz_categories')
-                ->onDelete('set null');
-            $table->enum('difficulty', ['easy', 'medium', 'hard']);
+        
+            $table->foreignId('question_id')
+                  ->constrained('questions')
+                  ->onDelete('cascade')
+                  ->onUpdate('cascade');
+            
+            $table->foreignId('answer_id')
+                  ->constrained('answers')
+                  ->onDelete('cascade')
+                  ->onUpdate('cascade');
+            
             $table->timestamps();
         });
+        
     }
 
     /**
@@ -34,6 +39,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('quizzes');
+        Schema::dropIfExists('user_choices');
     }
 };

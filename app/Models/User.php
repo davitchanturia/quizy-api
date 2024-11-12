@@ -45,4 +45,12 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function quizzesTaken()
+    {
+        return $this->belongsToMany(Quiz::class, 'user_choices')
+            ->withPivot(['question_id', 'answer_id'])
+            ->withTimestamps();
+    }
+
 }

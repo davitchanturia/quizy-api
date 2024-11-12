@@ -74,4 +74,9 @@ class Quiz extends Model
     {
         return $this->owner_id === $user->id;
     }
+
+    public function userChoices()
+    {
+        return $this->hasMany(UserChoice::class);
+    }
 }

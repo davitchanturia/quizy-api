@@ -29,4 +29,9 @@ class Answer extends Model
     {
         return $this->belongsTo(Question::class);
     }
+
+    public function userChoices()
+    {
+        return $this->hasMany(UserChoice::class);
+    }
 }
