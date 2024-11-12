@@ -40,7 +40,7 @@ class QuizController extends Controller
 
     public function categories()
     {
-        return QuizCategory::all();
+        return response()->json(QuizCategory::all());
     }
 
     /**
@@ -62,9 +62,11 @@ class QuizController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Quiz $quiz)
+    public function show($id)
     {
-        //
+        $quiz = Quiz::with(['owner', 'category', 'questions.answers'])->find($id);
+    
+        return response()->json($quiz);
     }
 
     /**

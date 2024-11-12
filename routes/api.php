@@ -18,6 +18,6 @@ Route::middleware(['auth:sanctum'])->get('/get', function(Request $request) {
     return response()->json(['users' => $users]);
 });
 
-Route::middleware(['auth:sanctum'])->post('/quiz', [QuizController::class, 'index']);
-
+Route::middleware(['auth:sanctum'])->post('/quizzes', [QuizController::class, 'index']);
 Route::middleware(['auth:sanctum'])->get('/quiz/categories', [QuizController::class, 'categories']);
+Route::middleware(['auth:sanctum'])->get('/quiz/{id}', [QuizController::class, 'show']);
