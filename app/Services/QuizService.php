@@ -21,6 +21,11 @@ class QuizService
         $structuredQuiz = [
             'quiz_id' => $quizResults->id,
             'title' => $quizResults->title,
+            'created_at' => $quizResults->created_at->format('M d, Y'),
+            'owner' => $quizResults->owner->name,
+            'category' => $quizResults->category->name,
+            'difficulty' => $quizResults->difficulty,
+            'questions_count' => $quizResults->questions->count(),
             'questions' => $quizResults->questions->map(function ($question) {
                 $userChoice = $question->userChoices->first();
                 $correctAnswer = $question->answers->first(); // Assumes only one correct answer

@@ -20,6 +20,7 @@ class Quiz extends Model
         'category_id',
         'owner_id',
         'is_active',
+        'finished_at',
         'difficulty',
     ];
 
@@ -79,4 +80,11 @@ class Quiz extends Model
     {
         return $this->hasMany(UserChoice::class);
     }
+
+    public function markAsFinished()
+    {
+        $this->finished_at = now();
+        $this->save();
+    }
+
 }
