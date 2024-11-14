@@ -14,21 +14,26 @@ return new class extends Migration
         Schema::create('user_choices', function (Blueprint $table) {
             $table->id();
         
+            $table->foreignId('quiz_id')
+                ->constrained('quizzes')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
+
             $table->foreignId('owner_id')
-                  ->constrained('users')
-                  ->onDelete('cascade')
-                  ->onUpdate('cascade');
+                ->constrained('users')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
         
             $table->foreignId('question_id')
-                  ->constrained('questions')
-                  ->onDelete('cascade')
-                  ->onUpdate('cascade');
+                ->constrained('questions')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
             
             $table->foreignId('answer_id')
-                  ->constrained('answers')
-                  ->onDelete('cascade')
-                  ->onUpdate('cascade');
-            
+                ->constrained('answers')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
+        
             $table->timestamps();
         });
         

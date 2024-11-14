@@ -2,11 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Quiz;
 use App\Models\UserChoice;
+use App\Services\QuizService;
 use Illuminate\Http\Request;
 
 class UserChoiceController extends Controller
 {
+
+    protected $quizService;
+
+    public function __construct(QuizService $quizService)
+    {
+        $this->quizService = $quizService;
+    }
+
     public function store(Request $request)
     {
         $data = $request->validate([
@@ -20,13 +30,13 @@ class UserChoiceController extends Controller
         foreach ($data['choices'] as $answer) {
             UserChoice::create([
                 'owner_id' => $data['user_id'],
-                // 'quiz_id' => $data['quiz_id'],
+                'quiz_id' => $data['quiz_id'],
                 'question_id' => $answer['question_id'],
                 'answer_id' => $answer['answer_id'],
             ]);
         }
-    
-        return response()->json(['message' => 'Quiz results saved successfully.']);
-    
+
+        $structuredQuiz = $this->quizService->getQuizWithResults($data['quiz_id'], $data['user_id']);
+        return response()->json($structuredQuiz);
     }
 }
