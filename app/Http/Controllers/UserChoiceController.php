@@ -29,12 +29,16 @@ class UserChoiceController extends Controller
         ]);
             
         foreach ($data['choices'] as $answer) {
-            UserChoice::create([
-                'owner_id' => $data['user_id'],
-                'quiz_id' => $data['quiz_id'],
-                'question_id' => $answer['question_id'],
-                'answer_id' => $answer['answer_id'],
-            ]);
+            UserChoice::updateOrCreate(
+                [
+                    'owner_id' => $data['user_id'],
+                    'quiz_id' => $data['quiz_id'],
+                    'question_id' => $answer['question_id'],
+                ],
+                [
+                    'answer_id' => $answer['answer_id'],
+                ]
+            );
         }
 
         // Mark the quiz as completed for the user
