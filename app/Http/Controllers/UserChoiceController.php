@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Quiz;
+use App\Models\User;
 use App\Models\UserChoice;
 use App\Services\QuizService;
 use Illuminate\Http\Request;
@@ -35,6 +36,10 @@ class UserChoiceController extends Controller
                 'answer_id' => $answer['answer_id'],
             ]);
         }
+
+        // Mark the quiz as completed for the user
+        $user = User::find($data['user_id']);
+        $user->markQuizAsCompleted($data['quiz_id']);
 
         $structuredQuiz = $this->quizService->getQuizWithResults($data['quiz_id'], $data['user_id']);
         return response()->json($structuredQuiz);

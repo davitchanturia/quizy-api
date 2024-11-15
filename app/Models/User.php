@@ -53,4 +53,14 @@ class User extends Authenticatable
             ->withTimestamps();
     }
 
+    public function completedQuizzes()
+    {
+        return $this->belongsToMany(Quiz::class)->withPivot('completed')->withTimestamps();
+    }
+
+    public function markQuizAsCompleted(int $quizId): void
+    {
+        $this->completedQuizzes()->attach($quizId, ['completed' => true]);
+    }
+
 }
