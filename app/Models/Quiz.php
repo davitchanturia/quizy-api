@@ -34,7 +34,7 @@ class Quiz extends Model
         return $this->belongsTo(User::class, 'owner_id');
     }
 
-    public function users()
+    public function completedByUsers()
     {
         return $this->belongsToMany(User::class)->withPivot('completed')->withTimestamps();
     }
@@ -91,6 +91,11 @@ class Quiz extends Model
     {
         $this->finished_at = now();
         $this->save();
+    }
+
+    protected function getIsCompletedAttribute($value)
+    {
+        return (bool) $value;
     }
 
 }

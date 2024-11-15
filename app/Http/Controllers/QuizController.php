@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateQuizRequest;
 use App\Models\Quiz;
 use App\Models\QuizCategory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class QuizController extends Controller
 {
@@ -22,7 +23,16 @@ class QuizController extends Controller
         $difficulty = $request->query('difficulty');
         $search = $request->query('search');
         $categories = $request->input('categories');
+
+        $userId = auth()->user()->id; // Get the authenticated user's ID     
         
+        $isCompletedSubQuery = DB::table('quiz_user')
+            ->select('completed')
+            ->whereColumn('quiz_user.quiz_id', 'quizzes.id')
+            ->where('quiz_user.user_id', $userId)
+            ->where('quiz_user.completed', true)
+            ->limit(1);
+
         $quizzes = Quiz::with(['owner', 'category'])
             ->when($difficulty, function ($query, $difficulty) {
                 return $query->where('difficulty', $difficulty);
@@ -33,6 +43,7 @@ class QuizController extends Controller
             ->when(!empty($categories), function ($query) use ($categories) {
                 return $query->whereIn('category_id', $categories);
             })
+            ->addSelect(['is_completed' => $isCompletedSubQuery])
             ->get();
     
         return response()->json($quizzes);
@@ -65,6 +76,14 @@ class QuizController extends Controller
     public function show($id)
     {
         $quiz = Quiz::with(['owner', 'category', 'questions.answers'])->find($id);
+    
+        if (!$quiz) {
+            return response()->json(['error' => 'Quiz not found'], 404);
+        }
+    
+        $userId = auth()->id();
+        $quiz->is_completed = $quiz->isCompletedBy($userId);
+    
     
         return response()->json($quiz);
     }
