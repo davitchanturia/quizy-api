@@ -6,11 +6,20 @@ use App\Http\Requests\StoreQuizRequest;
 use App\Http\Requests\UpdateQuizRequest;
 use App\Models\Quiz;
 use App\Models\QuizCategory;
+use App\Services\QuizService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class QuizController extends Controller
 {
+
+    protected $quizService;
+
+    public function __construct(QuizService $quizService)
+    {
+        $this->quizService = $quizService;
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -86,6 +95,11 @@ class QuizController extends Controller
     
     
         return response()->json($quiz);
+    }
+
+    public function results($quizId)
+    {
+        return $this->quizService->getQuizWithResults($quizId, auth()->id());
     }
 
     /**
