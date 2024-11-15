@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Quiz extends Model
 {
@@ -97,5 +98,17 @@ class Quiz extends Model
     {
         return (bool) $value;
     }
+
+    // Quiz.php (Model)
+
+    public function isCompletedBy($userId)
+    {
+        return DB::table('quiz_user')
+            ->where('quiz_id', $this->id)
+            ->where('user_id', $userId)
+            ->where('completed', true)
+            ->exists();
+    }
+
 
 }
