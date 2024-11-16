@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
     return $request->user();
 });
+Route::middleware(['auth:sanctum'])->get('/users/{user}/quizzes', [QuizController::class, 'userQuizzes']);
 
 Route::middleware('auth:sanctum')->post('/user/avatar', [UserController::class, 'uploadAvatar']);
 

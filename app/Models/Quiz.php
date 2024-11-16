@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
@@ -99,7 +100,15 @@ class Quiz extends Model
         return (bool) $value;
     }
 
-    // Quiz.php (Model)
+    protected function getIsActiveAttribute($value)
+    {
+        return (bool) $value;
+    }
+
+    protected function getCreatedAtAttribute($value)
+    {
+        return Carbon::parse($value)->diffForHumans();
+    }
 
     public function isCompletedBy($userId)
     {

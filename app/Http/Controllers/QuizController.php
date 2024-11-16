@@ -6,6 +6,7 @@ use App\Http\Requests\StoreQuizRequest;
 use App\Http\Requests\UpdateQuizRequest;
 use App\Models\Quiz;
 use App\Models\QuizCategory;
+use App\Models\User;
 use App\Services\QuizService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -55,6 +56,13 @@ class QuizController extends Controller
             ->addSelect(['is_completed' => $isCompletedSubQuery])
             ->get();
     
+        return response()->json($quizzes);
+    }
+
+    public function userQuizzes(User $user)
+    {
+        $quizzes = $user->createdQuizzes()->with(['category'])->get();
+
         return response()->json($quizzes);
     }
 
