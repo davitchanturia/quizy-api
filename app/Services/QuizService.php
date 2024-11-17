@@ -2,6 +2,7 @@
 namespace App\Services;
 
 use App\Models\Quiz;
+use Carbon\Carbon;
 
 class QuizService
 {
@@ -22,7 +23,7 @@ class QuizService
             'quiz_id' => $quizResults->id,
             'title' => $quizResults->title,
             'is_completed' => true,
-            'created_at' => $quizResults->created_at->format('M d, Y'),
+            'created_at' => Carbon::parse($quizResults->created_at)->format('M d, Y'),
             'owner' => $quizResults->owner->name,
             'category' => $quizResults->category->name,
             'difficulty' => $quizResults->difficulty,

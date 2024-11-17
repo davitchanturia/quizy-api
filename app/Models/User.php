@@ -65,7 +65,14 @@ class User extends Authenticatable
 
     public function markQuizAsCompleted(int $quizId): void
     {
-        $this->completedQuizzes()->attach($quizId, ['completed' => true]);
+        if (!$this->completedQuizzes()->where('quiz_id', $quizId)->exists()) 
+        {
+            $this->completedQuizzes()->attach($quizId, ['completed' => true]);
+        } else {
+            $this->completedQuizzes()->updateExistingPivot($quizId, [
+                'updated_at' => now(),
+            ]);
+        }
     }
 
 }

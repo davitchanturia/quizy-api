@@ -27,9 +27,9 @@ class UserChoiceController extends Controller
             'choices.*.question_id' => 'required|exists:questions,id',
             'choices.*.answer_id' => 'required|exists:answers,id',
         ]);
-            
+
         foreach ($data['choices'] as $answer) {
-            UserChoice::updateOrCreate(
+            $userChoice = UserChoice::updateOrCreate(
                 [
                     'owner_id' => $data['user_id'],
                     'quiz_id' => $data['quiz_id'],
@@ -37,13 +37,15 @@ class UserChoiceController extends Controller
                 ],
                 [
                     'answer_id' => $answer['answer_id'],
+                    'created_at' => now(), 
+                    'updated_at' => now(),
                 ]
             );
         }
 
         // Mark the quiz as completed for the user
         $user = User::find($data['user_id']);
-        $user->markQuizAsCompleted($data['quiz_id']);
+        $user->markQuizAsCompleted($data['quiz_id']);      
 
         $structuredQuiz = $this->quizService->getQuizWithResults($data['quiz_id'], $data['user_id']);
         return response()->json($structuredQuiz);
