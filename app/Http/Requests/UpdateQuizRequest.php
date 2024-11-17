@@ -11,7 +11,7 @@ class UpdateQuizRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,10 @@ class UpdateQuizRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'title' => 'required|string|max:255',
+            'category_id' => 'required|exists:quiz_categories,id',
+            'is_active' => 'required|boolean',
+            'difficulty' => 'required|string|in:easy,medium,hard',
         ];
     }
 }

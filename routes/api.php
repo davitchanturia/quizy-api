@@ -21,6 +21,8 @@ Route::middleware(['auth:sanctum'])->get('/get', function(Request $request) {
 });
 
 Route::middleware(['auth:sanctum'])->post('/quizzes', [QuizController::class, 'index']);
+Route::middleware(['auth:sanctum'])->patch('/quizzes/{quiz}', [QuizController::class, 'update'])->name('quizzes.update');
+
 Route::middleware(['auth:sanctum'])->get('/quiz/categories', [QuizController::class, 'categories']);
 Route::middleware(['auth:sanctum'])->get('/quiz/{id}', [QuizController::class, 'show']);
 Route::middleware(['auth:sanctum'])->get('/quiz/{id}/results', [QuizController::class, 'results']);
