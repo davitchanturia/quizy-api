@@ -76,7 +76,28 @@ class QuizController extends Controller
      */
     public function store(StoreQuizRequest $request)
     {
-        //
+        $validatedData = $request->validated();
+
+        $quiz = Quiz::create([
+            'title' => $validatedData['info']['title'],
+            'description' => $validatedData['info']['description'],
+            'category_id' => $validatedData['info']['category'],
+            'difficulty' => $validatedData['info']['difficulty'],
+            'owner_id' => auth()->id(),
+            'is_active' => true,
+        ]);
+
+        foreach ($validatedData['questions'] as $questionData) {
+            $question = $quiz->questions()->create([
+                'content' => $questionData['content'],
+            ]);
+
+            foreach ($questionData['answers'] as $answerData) {
+                $question->answers()->create($answerData);
+            }
+        }
+
+        return response()->json($quiz->load(['category','questions.answers']));
     }
 
     /**

@@ -25,6 +25,7 @@ Route::middleware(['auth:sanctum'])->patch('/quizzes/{quiz}', [QuizController::c
 
 Route::middleware(['auth:sanctum'])->get('/quiz/categories', [QuizController::class, 'categories']);
 Route::middleware(['auth:sanctum'])->get('/quiz/{id}', [QuizController::class, 'show']);
-Route::middleware(['auth:sanctum'])->get('/quiz/{id}/results', [QuizController::class, 'results']);
+Route::middleware(['auth:sanctum'])->post('/quiz/create', [QuizController::class, 'store']);
 
+Route::middleware(['auth:sanctum'])->get('/quiz/{id}/results', [QuizController::class, 'results']);
 Route::middleware(['auth:sanctum'])->post('/quiz/{id}/choices', [UserChoiceController::class, 'store']);
