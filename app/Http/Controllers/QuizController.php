@@ -139,8 +139,36 @@ class QuizController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Quiz $quiz)
+    public function destroy(Request $request)
     {
-        //
+        $request->validate([
+            'ids' => 'array|nullable', 
+            'ids.*' => 'integer|exists:quizzes,id', 
+        ]);
+
+        $quizIds = $request->input('ids', []);
+        $all = $request->query('all');
+
+        try {
+            if ($all) {
+                Quiz::truncate(); 
+            } elseif (!empty($quizIds)) {
+                Quiz::whereIn('id', $quizIds)->delete();
+            } else {
+                return response()->json([
+                    'message' => 'No valid quizzes specified for deletion.',
+                ], 400);
+            }
+
+            return response()->json([
+                'message' => 'Quizzes deleted successfully.',
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Failed to delete quizzes.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+
     }
 }
