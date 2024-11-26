@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreQuestionRequest;
 use App\Http\Requests\UpdateQuestionRequest;
 use App\Models\Question;
+use App\Models\Quiz;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class QuestionController extends Controller
 {
@@ -51,9 +54,16 @@ class QuestionController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateQuestionRequest $request, Question $question)
+    public function updateQuestions(UpdateQuestionRequest $request, $quizId)
     {
-        //
+        $validatedData = $request->validated();
+    
+        $quiz = Quiz::findOrFail($quizId);
+        $quiz->updateQuestions($validatedData);
+    
+        $quiz->load('questions.answers');
+    
+        return response()->json($quiz);    
     }
 
     /**

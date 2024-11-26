@@ -119,5 +119,31 @@ class Quiz extends Model
             ->exists();
     }
 
+    public function updateQuestions(array $questions)
+    {
+        DB::transaction(function () use ($questions) {
+            $this->deleteOldQuestions();
+            $this->attachNewQuestions($questions);
+        });
+    }
+
+    private function deleteOldQuestions()
+    {
+        $this->questions()->each(function ($question) {
+            $question->answers()->delete();
+            $question->delete();
+        });
+    }
+
+    private function attachNewQuestions(array $questions)
+    {
+        foreach ($questions as $questionData) {
+            $question = $this->questions()->create([
+                'content' => $questionData['content'],
+            ]);
+
+            $question->answers()->createMany($questionData['answers']);
+        }
+    }
 
 }
