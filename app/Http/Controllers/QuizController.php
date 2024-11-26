@@ -61,7 +61,7 @@ class QuizController extends Controller
 
     public function userQuizzes(User $user)
     {
-        $quizzes = $user->createdQuizzes()->with(['category'])->get();
+        $quizzes = $user->createdQuizzes()->with(['category', 'questions.answers'])->get();
 
         return response()->json($quizzes);
     }
